@@ -13,11 +13,11 @@ export const TicketContextProvider: React.FC = ({ children }: any) => {
 
     const updateTickets = useCallback((info: any) => {
         setTickets(info)
-    }, [tickets])
+    }, [])
 
     const updateTicketData = useCallback((info: any) => {
         setTicketData(info)
-    }, [ticketData])
+    }, [])
 
     return (
         <TicketContext.Provider

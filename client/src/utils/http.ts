@@ -31,12 +31,14 @@ export class HttpError extends Error {
   }
 }
 
+const API_BASE_URL = "http://127.0.0.1:8000/heunets/v1.0/api"
+
 class HttpClient {
   private axiosInstance: AxiosInstance;
 
   constructor() {
     this.axiosInstance = axios.create({
-      baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+      baseURL: API_BASE_URL,
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',

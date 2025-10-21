@@ -20,11 +20,11 @@ export const AuthContextProvider: React.FC = ({ children }: any) => {
 
     const updateLoginData = useCallback((info: any) => {
         setLoginData(info)
-    }, [loginData])
+    }, [])
 
     const updateUserData = useCallback((info: any) => {
         setUser(info)
-    }, [user])
+    }, [])
 
     return (
         <AuthContext.Provider
