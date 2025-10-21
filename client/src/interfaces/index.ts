@@ -3,6 +3,7 @@ export interface IHandlers {
     handleQueryChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     openModal: () => void;
     handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    handleRowSelection: (id: string) => void;
 }
 export interface IField {
     label: string;

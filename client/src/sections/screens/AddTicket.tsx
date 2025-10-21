@@ -3,7 +3,7 @@ import { Modal } from '@/components/helpers'
 import { Button, InputField } from '@/components/shared'
 import { IHandlers } from '@/interfaces';
 
-interface AddTicket {
+interface IAddTicket {
     isOpen: boolean;
     onClose: () => void;
     handlers: IHandlers,
@@ -18,7 +18,7 @@ const AddTicket = ({
     errors,
     values,
     loading
-}: AddTicket) => {
+}: IAddTicket) => {
 
   return (
     <Modal

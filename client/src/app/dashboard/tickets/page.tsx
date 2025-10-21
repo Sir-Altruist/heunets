@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 import Skeleton from '@/sections/skeleton'
 import { useRouter } from 'next/navigation'
 import { Alert } from '@/components/helpers'
-import { AddTicketModal } from '@/sections/screens'
+import { AddTicketModal, TicketDetailsModal } from '@/sections/screens'
 import validations from '@/validations'
 import * as yup from "yup";
 
@@ -102,10 +102,24 @@ const Page = () => {
         status: "",
     })
     const [trigger, setTrigger] = useState(false);
-    const [modalTrigger, setModalTrigger] = useState(false)
+    const [modalTrigger, setModalTrigger] = useState({
+        upload: false,
+        details: false
+    })
      const [alertMessage, setAlertMessage] = useState("")
     const [alertStatus, setAlertStatus] = useState<any>("")
     const [alertTrigger, setAlertTrigger] = useState(false)
+    const [selectedRow, setSelectedRow] = useState<any>({
+        id: '',
+        addedBy: '',
+        assignedTo: '',
+        createdAt: '',
+        description: '',
+        dateAssigned: '',
+        dateResolved: '',
+        dateClosed: '',
+        status: ''
+    })
     const [errors, setErrors] = useState<{
         title?: string;
         description?: string;
@@ -153,6 +167,10 @@ const Page = () => {
             }))
             try {
                 const data: any = await TicketServices.fetchAllTickets(query)
+                if(data.details.badToken){
+                    localStorage.removeItem("access_token")
+                    router.push("/")
+                }
                 if(data.status === "success"){
                     updateTickets(data.details?.rows)
                 }
@@ -168,7 +186,7 @@ const Page = () => {
         fetchTickets()
 
         return () => { mounted.current = false }
-    }, [trigger, query, updateTickets])
+    }, [trigger, router])
 
     const handlers = {
         handleQueryChange({ target }: React.ChangeEvent<HTMLInputElement>){
@@ -188,7 +206,18 @@ const Page = () => {
         },
 
         openModal(){
-            setModalTrigger(true)
+            setModalTrigger(prev => ({
+                ...prev,
+                upload: true
+            }))
+        },
+
+        handleRowSelection(id: string){
+            setSelectedRow(() => tickets.find((ticket: any) => ticket.id === id))
+            setModalTrigger(prev => ({
+                ...prev,
+                details: true
+            }))
         },
 
         async handleSubmit(e: React.FormEvent<HTMLFormElement>){
@@ -308,19 +337,31 @@ const Page = () => {
                 {/* Table */}
                 <div className='mt-20'>
                     {
-                        loading.tickets ? <Skeleton.Table /> : <Table tableHeaders={tableHeaders} tableData={tickets} />
+                        loading.tickets ? <Skeleton.Table /> : <Table 
+                        tableHeaders={tableHeaders} 
+                        tableData={tickets}
+                        handlers={handlers}
+                        />
                     }
                 </div>
             </div>
         </div>
         
           <AddTicketModal 
-          isOpen={modalTrigger}
-          onClose={() => setModalTrigger(false)}
+          isOpen={modalTrigger.upload}
+          onClose={() => setModalTrigger(prev => ({...prev, upload: false}))}
           handlers={handlers}
           errors={errors}
           values={{ title, description }}
           loading={loading.upload}
+          />
+
+          <TicketDetailsModal 
+          isOpen={modalTrigger.details}
+          onClose={() => setModalTrigger(prev => ({...prev, details: false}))}
+          data={selectedRow}
+        //   handlers={handlers}
+        //   loading={loading.upload}
           />
 
           {alertTrigger && 

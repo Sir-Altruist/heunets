@@ -4,8 +4,9 @@ import Image from 'next/image'
 import React, { ReactNode } from 'react'
 import Logo from "@/assets/images/logo.jpg"
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Tools } from '@/utils'
+import { LogoutIcon } from '@/assets/icons'
 
 const navItems = [
     {
@@ -22,10 +23,15 @@ const navItems = [
 const { cn } = Tools
 const Layout = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname()
+  const router = useRouter()
+  const logout = () => {
+    localStorage.removeItem("access_token")
+    router.push("/")
+  }
   return (
     <div className='w-full min-h-screen flex'>
       {/* Side menu */}
-      <div className='w-[250px] border py-5'>
+      <div className='w-[250px] flex flex-col border py-5'>
         {/* Top Logo */}
         <div className='w-full flex justify-center gap-2 border-b pb-5'>
           <Image src={Logo} alt='logo' className='size-10' />
@@ -55,6 +61,14 @@ const Layout = ({ children }: { children: ReactNode }) => {
               )
             })
           }
+        </div>
+        <div className='w-full mt-auto flex justify-center items-center'>
+          <div className='inline-flex gap-1 mb-10 cursor-pointer' onClick={logout}>
+            <div className='flex justify-center items-center'>
+              <LogoutIcon className='text-[#CB1616]' />
+            </div>
+            <p className='text-[#CB1616]'>Logout</p>
+          </div>
         </div>
       </div>
 

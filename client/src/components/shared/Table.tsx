@@ -1,5 +1,6 @@
 import React from 'react'
 import { Tools } from '@/utils';
+import { IHandlers } from '@/interfaces';
 
 interface ITable {
     tableHeaders: {
@@ -7,38 +8,15 @@ interface ITable {
         key: string
     }[];
     tableData: any[];
-    onView?: (data: any) => void;
-    onEdit?: (data: any) => void;
-    onDelete?: (data: any) => void;
+    handlers?: Pick<IHandlers, "handleRowSelection">
     showActions?: boolean;
 }
 
-const colors = [
-    {
-        status: 'unassigned',
-        text: '#1e293b',
-        background: '#f1f5f9'
-    },
-    {
-        status: 'in-progress',
-        text: '#b45309',
-        background: '#fef3c7'
-    },
-    {
-        status: 'resolved',
-        text: '#15803d',
-        background: '#dcfce7'
-    },
-    {
-        status: 'closed',
-        text: '#b91c1c',
-        background: '#fee2e2'
-    }
-]
-
+const { getStatusColor } = Tools
 const Table = ({ 
     tableHeaders, 
-    tableData, 
+    tableData,
+    handlers, 
     showActions = true 
 }: ITable) => {
     return (
@@ -75,8 +53,8 @@ const Table = ({
                                         <div 
                                             className='w-max mx-auto py-1.5 px-3 rounded-full'
                                             style={{ 
-                                                backgroundColor: colors.find(color => color.status === data[header.key])?.background,
-                                                color: colors.find(color => color.status === data[header.key])?.text
+                                                backgroundColor: getStatusColor(data[header.key])?.bgColor,
+                                                color: getStatusColor(data[header.key])?.textColor
                                             }}>
                                             {data[header.key] || 'N/A'}
                                         </div>
@@ -87,7 +65,7 @@ const Table = ({
                                         <div className="flex items-center justify-center gap-2">
                                             
                                                 <button
-                                                    // onClick={() => onView(data)}
+                                                    onClick={() => handlers?.handleRowSelection(data.id)}
                                                     className="px-3 py-1.5 text-xs font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors"
                                                 >
                                                     View
