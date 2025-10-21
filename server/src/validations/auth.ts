@@ -20,7 +20,7 @@ class Schema {
 
     login(payload: Partial<UserPayload>) {
         const schema: Joi.ObjectSchema = Joi.object({
-            email: Joi.string().email().label("Invalid or missing email or phone number").required(),
+            email: Joi.string().email().label("Invalid or missing email").required(),
             password: Joi.string().min(8).max(16).label("Invalid or missing password").pattern(Schema.passwordRegex).required()
         });
 
