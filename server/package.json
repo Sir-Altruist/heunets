@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "cross-env nodemon --watch 'src/**/*.ts' --exec ts-node src/server.ts"
+    "dev": "cross-env nodemon --watch 'src/**/*.ts' --exec ts-node src/server.ts",
+    "build": "cross-env rimraf ./dist && tsc"
   },
   "dependencies": {
     "@joi/date": "^2.1.1",
@@ -19,6 +20,7 @@
     "morgan": "^1.10.1",
     "pino": "^10.1.0",
     "pino-pretty": "^13.1.2",
+    "rimraf": "^6.0.1",
     "sequelize": "^6.37.7",
     "sqlite3": "^5.1.7"
   },
