@@ -87,7 +87,7 @@ const requestOptions = [
         value: "Added by me"
     },
 ]
-const page = () => {
+const Page = () => {
     const [requestType, setRequestType] = useState("Assigned to me")
     const [loading, setLoading] = useState({
         profile: false,
@@ -142,7 +142,7 @@ const page = () => {
        fetchProfile()
 
        return () => { mounted.current = false }
-    }, [])
+    }, [router, updateUserData])
 
     useEffect(() => {
         mounted.current = true
@@ -168,7 +168,7 @@ const page = () => {
         fetchTickets()
 
         return () => { mounted.current = false }
-    }, [trigger])
+    }, [trigger, query, updateTickets])
 
     const handlers = {
         handleQueryChange({ target }: React.ChangeEvent<HTMLInputElement>){
@@ -334,4 +334,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

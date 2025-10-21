@@ -8,13 +8,9 @@ type ProviderProps = {
 };
 
 const combineProviders: FC<ProviderProps> = ({ contexts, children }) => {
-  return contexts.reduceRight((acc, Provider: any) => {
-    return createElement(Provider, {
-      children: acc
-    });
-    // return <Provider>{acc}</Provider>
+  return contexts.reduceRight((acc, Provider) => {
+    return createElement(Provider, null, acc);
   }, children);
 };
 
-// const 
 export default combineProviders;
