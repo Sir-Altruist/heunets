@@ -1,6 +1,5 @@
 import React from 'react'
 import { Tools } from '@/utils';
-import SelectField from './SelectField';
 
 interface ITable {
     tableHeaders: {
@@ -37,14 +36,9 @@ const colors = [
     }
 ]
 
-const { cn } = Tools
-
 const Table = ({ 
     tableHeaders, 
     tableData, 
-    onView, 
-    onEdit, 
-    onDelete,
     showActions = true 
 }: ITable) => {
     return (
@@ -71,7 +65,7 @@ const Table = ({
                         return (
                             <tr 
                                 key={`row-${i}`}
-                                className="border-b border-zinc-300 text-[#475569] text-sm text-gray-900"
+                                className="border-b border-zinc-300 text-sm text-gray-900"
                             >
                                 {tableHeaders.map(header => (
                                     <td 
@@ -89,7 +83,7 @@ const Table = ({
                                     </td>
                                 ))}
                                 
-                                    <td className="py-5">
+                                    <td className="max-w-[200px] py-5">
                                         <div className="flex items-center justify-center gap-2">
                                             
                                                 <button
@@ -98,29 +92,8 @@ const Table = ({
                                                 >
                                                     View
                                                 </button>
-                                                {/* <SelectField options={
-                                                    colors.map(color => color.status !== )
-                                                } /> */}
-                                            
-                                           
-                                                {/* <button
-                                                    // onClick={() => onEdit(data)}
-                                                    className="px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-50 hover:bg-amber-100 rounded-md transition-colors"
-                                                >
-                                                    Edit
-                                                </button> */}
-                                            
-                                            
-                                                {/* <button
-                                                    // onClick={() => onDelete(data)}
-                                                    className="px-3 py-1.5 text-xs font-medium text-red-700 bg-red-50 hover:bg-red-100 rounded-md transition-colors"
-                                                >
-                                                    Delete
-                                                </button> */}
-                                            
                                         </div>
                                     </td>
-                                
                             </tr>
                         )
                     })}

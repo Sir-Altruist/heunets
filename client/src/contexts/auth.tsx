@@ -1,7 +1,6 @@
 "use client"
 
 import { createContext, useCallback, useState } from "react";
-import { AuthServices } from "@/services";
 
 interface ILogin {
     email: string;
@@ -14,55 +13,26 @@ export const AuthContextProvider: React.FC = ({ children }: any) => {
         email: '',
         password: ''
     })
-    const [message, setMessage] = useState<{
-        error: string;
-        success: string
-    }>({
-        error: "",
-        success: ""
+    const [user, setUser] = useState({
+        username: '',
+        firstName: ''
     })
-    const [user, setUser] = useState<any>(null)
-    const [loading, setLoading] = useState(false)
 
     const updateLoginData = useCallback((info: any) => {
         setLoginData(info)
-    }, [])
+    }, [loginData])
 
-    const handleLogin = useCallback(async (data: ILogin): Promise<any> => {
-        try {
-            setLoading(true)
-            setMessage({
-                error: "",
-                success: ""
-            })
-            const response = await AuthServices.login(data)
-            if(response.status === "success"){
-                localStorage.setItem("access_token", JSON.stringify(response.details.token))
-                setMessage(prev => ({
-                    ...prev,
-                    success: response.message
-                }))
-            } else {
-                setMessage(prev => ({
-                    ...prev,
-                    error: response.message
-                }))
-            }
-        } catch (error) {
-            console.log("error in login: ", error)
-        } finally {
-            setLoading(false)
-        }
-    }, [])
+    const updateUserData = useCallback((info: any) => {
+        setUser(info)
+    }, [user])
 
     return (
         <AuthContext.Provider
         value={{
             loginData,
-            message,
-            loading,
+            user,
             updateLoginData,
-            handleLogin
+            updateUserData
         }}
         >
             {children}

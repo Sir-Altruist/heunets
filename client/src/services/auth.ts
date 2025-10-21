@@ -1,10 +1,8 @@
 import { ILogin } from "@/interfaces";
-import api from "./api";
+import { httpClient } from "@/utils";
 
 export const login = async (payload: ILogin) => {
-    return await api.req('/auth/login', "POST", payload)
+    return await httpClient.post("/auth/login", payload)
 }
 
-// export const login = async (payload: ILogin) => {
-//     return api.req('/auth/login', "POST", payload)
-// }
+

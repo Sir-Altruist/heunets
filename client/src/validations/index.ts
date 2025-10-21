@@ -20,6 +20,18 @@ const validations =  {
             ),
         });
         return await schema.validate(payload, { abortEarly: false });
+    },
+
+    async ticket(payload: { title: string; description: string}) {
+        const schema = yup.object({
+        title: yup
+            .string()
+            .required("title is required"),
+        description: yup
+            .string()
+            .required("description is required"),
+        });
+        return await schema.validate(payload, { abortEarly: false });
     }
 }
 

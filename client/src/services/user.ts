@@ -1,10 +1,11 @@
-import api from "./api";
+import { httpClient } from "@/utils";
 
 export const profile = async () => {
     const token = localStorage.getItem("access_token")
-    return await api.req('/users/profile', undefined, null, true, token)
+    return await httpClient.get("/users/profile", {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 }
 
-// export const login = async (payload: ILogin) => {
-//     return api.req('/auth/login', "POST", payload)
-// }

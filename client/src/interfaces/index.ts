@@ -1,5 +1,8 @@
 export interface IHandlers {
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+    handleQueryChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    openModal: () => void;
+    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
 export interface IField {
     label: string;
@@ -7,9 +10,10 @@ export interface IField {
     error: string;
     value: string;
     name: string;
-    handlers: IHandlers;
+    handlers: Pick<IHandlers, "onChange">;
     className?: string;
     inputType?: string;
+    type?: string;
 }
 
 export interface ILogin {

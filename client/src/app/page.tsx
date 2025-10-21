@@ -2,22 +2,22 @@
 
 import Image from "next/image";
 import Logo from "@/assets/images/logo.jpg"
-import { Tools } from "@/utils";
 import { Button, InputField } from "@/components/shared";
 import { useState, useContext } from "react";
 import validations from "@/validations";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
 import { AuthContext } from "@/contexts/auth";
+import { AuthServices } from "@/services";
+import { Alert } from "@/components/helpers";
 
-// const { cn } = Tools
+
 export default function Home() {
-  const [userData, setUserData] = useState({
-    email: '',
-    password: ''
-  })
-  const { email, password } = userData;
-  const { message, handleLogin, loading } = useContext(AuthContext)
+  const [loading, setLoading] = useState(false)
+  const [alertMessage, setAlertMessage] = useState("")
+  const [alertStatus, setAlertStatus] = useState<any>("")
+  const [alertTrigger, setAlertTrigger] = useState(false)
+  const { updateLoginData, loginData: { email, password} } = useContext(AuthContext)
 
   const router = useRouter()
   const [errors, setErrors] = useState<{
@@ -25,9 +25,9 @@ export default function Home() {
     password?: string;
   }>({});
   const handlers = {
-    onChange({ target }: React.ChangeEvent<HTMLInputElement>){
+    onChange({ target }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>){
       const { name, value } = target
-      setUserData(prev => ({
+      updateLoginData((prev: any) => ({
         ...prev,
         [name]: value
       }))
@@ -42,9 +42,20 @@ export default function Home() {
           password
         });
 
-        await handleLogin()
-        if(message.success){
+        setLoading(true)
+        const response: any = await AuthServices.login({ email, password})
+        if(response.status === "success"){
+          localStorage.setItem("access_token", response.details.token)
+          setAlertTrigger(true)
+          setAlertStatus("success")
+          setAlertMessage(response.message)
           router.push("/dashboard/tickets")
+          setTimeout(() => setAlertTrigger(false), 3000)
+        } else {
+          setAlertTrigger(true)
+          setAlertStatus("error")
+          setAlertMessage(response.message)
+          setTimeout(() => setAlertTrigger(false), 3000)
         }
       } catch (error) {
         if (error instanceof yup.ValidationError) {
@@ -59,9 +70,12 @@ export default function Home() {
           });
           setErrors(validationErrors)
         }
+      } finally {
+        setLoading(false)
       }
     }
   }
+
 
   return (
     <div className="w-full min-h-screen bg-[#EFF5FF] py-[200px]">
@@ -101,7 +115,6 @@ export default function Home() {
           error={errors.password as string}
           value={password}
           />
-
           <div className="mt-5">
             <Button 
             size="full" 
@@ -111,6 +124,12 @@ export default function Home() {
           </div>
         </form>
       </div>
+      {alertTrigger && <Alert 
+      message={alertMessage} 
+      type={alertStatus} 
+      onClose={() => setAlertTrigger(false)} 
+      isVisible={alertTrigger}
+      />}
     </div>
   );
 }

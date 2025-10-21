@@ -28,13 +28,15 @@ export default function CustomSelect({
   }, []);
 
   const handleSelect = (option: string) => {
-    setState(option)
+    setState((prev: any) => ({
+      ...prev,
+      status: option
+    }))
     setIsOpen(false);
   };
 
   return (
         <div className={cn("relative w-[150px] outline-none text-[#D5D9DE]", className)} ref={dropdownRef}>
-          {/* Select Button */}
             <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
@@ -53,7 +55,6 @@ export default function CustomSelect({
             />
           </button>
 
-          {/* Dropdown Menu */}
           {isOpen && (
             <div className="absolute overflow-y-auto top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden z-10 animate-fadeIn">
               {options.map((option) => {
