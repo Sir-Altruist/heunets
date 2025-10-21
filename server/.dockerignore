@@ -1,0 +1,25 @@
+# Node and package files
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Build artifacts
+dist
+coverage
+*.log
+
+# Environment and local config
+.env
+.env.*
+.DS_Store
+
+# Git & CI
+.git
+.gitignore
+.vscode
+.idea
+
+# Docker
+Dockerfile
+docker-compose.yml
+src/databases/*.db

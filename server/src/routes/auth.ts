@@ -8,6 +8,7 @@ const { onboarding, login } = AuthControllers;
 const { inspectOnboarding, inspectLogin } = ValidationsMiddleware
 const { permissions, authenticate } = AuthenticationMiddleware
 
+// router.post("/onboarding", inspectOnboarding, onboarding)
 router.post("/onboarding", authenticate, permissions(["users:create"]), inspectOnboarding, onboarding)
 router.post("/login", inspectLogin, login)
 
